@@ -7,10 +7,9 @@ from dataloader import train_dataloader
 from gan import Discriminator, Generator
 
 
-
-def to_img(x):# 将结果的-0.5~0.5变为0~1保存图片
+def to_img(x):  # 将结果的-0.5~0.5变为0~1保存图片
     out = 0.5 * (x + 1)
-    out = out.clamp(0, 1) #限制范围至01
+    out = out.clamp(0, 1)  #限制范围至01
     out = out.view(-1, 1, 28, 28)
     return out
 
@@ -59,7 +58,8 @@ if __name__ == '__main__':
                     epoch, epochs, lossD.cpu().item(), lossG.cpu().item(),
                     real_pred.cpu().mean().item(), fake_pred.cpu().mean().item()))
             if epoch == epochs - 1:
-                grid_imgs = make_grid(to_img(gen_imgs).cpu(),nrow=8,padding=2)
+                grid_imgs = make_grid(to_img(gen_imgs).cpu(), nrow=8, padding=2)
                 save_image(grid_imgs, 'results/gird_imgs.png')
 
-
+                torch.save(G.state_dict(), 'results/generator.pth')
+                torch.save(D.state_dict(), 'results/discriminator.pth')
